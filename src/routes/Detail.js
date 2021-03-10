@@ -10,11 +10,13 @@ import styled from "styled-components";
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       rating
       language
       medium_cover_image
       description_intro
+      isLiked @client
     }
     suggestion(id: $id) {
       id
@@ -22,6 +24,23 @@ const GET_MOVIE = gql`
     }
   }
 `;
+// const GET_MOVIE = gql`
+//   query getMovie($id: Int!) {
+//     movie(id: $id) {
+//       id
+//       title
+//       medium_cover_image
+//       language
+//       rating
+//       description_intro
+//       isLiked @client
+//     }
+//     suggestions(id: $id) {
+//       id
+//       medium_cover_image
+//     }
+//   }
+// `;
 
 const Container = styled.div`
   height: 100vh;
@@ -64,13 +83,17 @@ const Poster = styled.div`
 const Detail = () => {
   const { id } = useParams();
   const { loading, data } = useQuery(GET_MOVIE, {
-    variables: { id },
+    variables: { id: parseInt(id) },
   });
   return (
     <Container>
       <Column>
         {/*항상 삼항 연산자(ternary operator)로 만들어주자*/}
-        <Title>{loading ? "Loading..." : data?.movie?.title}</Title>
+        <Title>
+          {loading
+            ? "Loading..."
+            : `${data.movie.title} ${data.movie.isLiked ? "💖" : "😞"}`}
+        </Title>
         <Subtitle>
           {data?.movie?.language} . {data?.movie?.rating}
         </Subtitle>

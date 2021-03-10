@@ -8,6 +8,8 @@ const GET_MOVIES = gql`
   {
     movies {
       id
+      title
+      rating
       medium_cover_image
       isLiked @client
     }
@@ -52,7 +54,7 @@ const Loading = styled.div`
 const Movies = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 25px;
+  grid-gap: 100px 25px;
   width: 60%;
   position: relative;
   top: -50px;
@@ -81,6 +83,8 @@ const Home = () => {
             id={m.id}
             isLiked={m.isLiked}
             bg={m.medium_cover_image}
+            title={m.title}
+            rating={m.rating}
           />
         ))}
       </Movies>
