@@ -71,9 +71,14 @@ const Description = styled.p`
   font-size: 28px;
 `;
 
+const PosterContainer = styled.div`
+  height: 700px;
+  width: 500px;
+`;
+
 const Poster = styled.div`
-  width: 25%;
-  height: 60%;
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   background-image: url(${(props) => props.bg});
   background-size: cover;
@@ -89,17 +94,15 @@ const Detail = () => {
     <Container>
       <Column>
         {/*항상 삼항 연산자(ternary operator)로 만들어주자*/}
-        <Title>
-          {loading
-            ? "Loading..."
-            : `${data.movie.title} ${data.movie.isLiked ? "💖" : "😞"}`}
-        </Title>
+        <Title>{loading ? "Loading..." : data.movie.title}</Title>
         <Subtitle>
           {data?.movie?.language} . {data?.movie?.rating}
         </Subtitle>
         <Description>{data?.movie?.description_intro}</Description>
       </Column>
-      <Poster bg={data?.movie?.medium_cover_image}></Poster>
+      <PosterContainer>
+        <Poster bg={data?.movie?.medium_cover_image}></Poster>
+      </PosterContainer>
     </Container>
   );
 };
