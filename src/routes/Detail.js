@@ -16,6 +16,10 @@ const GET_MOVIE = gql`
       medium_cover_image
       description_intro
     }
+    suggestion(id: $id) {
+      id
+      medium_cover_image
+    }
   }
 `;
 
@@ -66,19 +70,13 @@ const Detail = () => {
     <Container>
       <Column>
         {/*항상 삼항 연산자(ternary operator)로 만들어주자*/}
-        <Title>{loading ? "Loading..." : data.movie.title}</Title>
-        {!loading && data.movie && (
-          <>
-            <Subtitle>
-              {data.movie.language} . {data.movie.rating}
-            </Subtitle>
-            <Description>{data.movie.description_intro}</Description>
-          </>
-        )}
+        <Title>{loading ? "Loading..." : data?.movie?.title}</Title>
+        <Subtitle>
+          {data?.movie?.language} . {data?.movie?.rating}
+        </Subtitle>
+        <Description>{data?.movie?.description_intro}</Description>
       </Column>
-      <Poster
-        bg={data && data.movie ? data.movie.medium_cover_image : ""}
-      ></Poster>
+      <Poster bg={data?.movie?.medium_cover_image}></Poster>
     </Container>
   );
 };
