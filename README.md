@@ -89,3 +89,64 @@ const resolvers = {
 export default resolvers;
 
 ~~~
+
+#### 3. Apollo를 이용한 GraphQL API받아오기
+- query에 변수가 하나도 없을때는 id를 적을 필요가 없다
+- query getMovie는 apollo를 위해 적는 코드
+- movie blabla~~ 는 우리 서버를 위해 적는 코드
+
+~~~ts
+import { gql, useQuery } from "@apollo/client";
+
+const GET_MOVIE = gql`
+  query getMovie($id: Int!) {
+    movie(id: $id) {
+      id
+      title
+      rating
+      language
+      medium_cover_image
+      description_intro
+      isLiked @client
+    }
+    suggestion(id: $id) {
+      id
+      medium_cover_image
+    }
+  }
+`;
+~~~
+
+#### 4. 프론트에서 new field 생성
+- 생성할때 graphQL API랑 이름이 같아야한다.
+- Mutation으로 상태값 변화시키기
+- Create Like&UnLike ToggleButton 
+
+~~~ts
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  resolvers: {
+    Movie: {
+      isLiked: () => false,
+    },
+    Mutation: {
+      toggleLikeMovie: (_, { id }, { cache }) => {
+        cache.modify({
+          id: `Movie:${id}`,
+          fields: {
+            isLiked: (isLiked) => !isLiked,
+          },
+        });
+      },
+    },
+  },
+  cache: new InMemoryCache(),
+});
+
+export default client;
+
+~~~
+
+## To Do List
+- [ ] GraphQL의 구조적인 공부 Schema와 resolver의 관계적인 공부
+- [ ] Apollo와 Redux의 구조적으로 이해하기
